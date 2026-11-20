@@ -1,0 +1,65 @@
+// use prisma-8
+
+enum Role {
+  HR
+  APPLICANT
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  SCREENED
+  REJECTED
+  ACCEPTED
+}
+
+model User {
+  id        String   @id @onCreate(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(APPLICANT)
+  createdAt DateTime @default(now()) @onCreate(now())
+
+  applications Application[]
+}
+
+model Job {
+  id           String    @id @onCreate(uuid())
+  title        String
+  description  String
+  requirements String
+  brand        String
+  status       JobStatus @default(OPEN)
+  createdAt    DateTime  @default(now()) @onCreate(now())
+
+  applications Application[]
+}
+
+model Application {
+  id        String            @id @onCreate(uuid())
+  userId    String
+  jobId     String
+  cvUrl     String
+  status    ApplicationStatus @default(PENDING)
+  createdAt DateTime          @default(now()) @onCreate(now())
+
+  user User @relation(fields: [userId], references: [id])
+  job  Job  @relation(fields: [jobId], references: [id])
+
+  screeningResult ScreeningResult?
+}
+
+model ScreeningResult {
+  id            String   @id @onCreate(uuid())
+  applicationId String   @unique
+  aiScore       Int
+  aiInsight     String
+  createdAt     DateTime @default(now()) @onCreate(now())
+
+  application Application @relation(fields: [applicationId], references: [id])
+}
