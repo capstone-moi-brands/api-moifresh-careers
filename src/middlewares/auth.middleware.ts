@@ -52,6 +52,8 @@ export const authorizeRoles = (...allowedRoles: string[]) => {
                 message: `Akses ditolak! Fitur ini hanya untuk role: ${allowedRoles.join(', ')}`,
             });
             return;
+
+
         }
 
         next();
