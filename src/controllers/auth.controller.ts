@@ -60,7 +60,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const getMe = async (req: Request, res: Response): Promise<void> => {
+export const getUserData = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;
         if (!userId) {
@@ -87,3 +87,5 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ message: 'Error server', error });
     }
 };
+
+export const getMe = getUserData;
